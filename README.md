@@ -1,3 +1,7 @@
+This repo contains the network definition and a set of pre-trained weights for the `aTENNuate` model. It is meant for users to evaluate the performance of the network on custom audio samples.
+
+Note that the repo does not contain the recurrent configuration of the network, hence it by itself cannot be efficiently used for real-time inference. In addition, the pre-trained network is not quantized or sparsified.
+
 # Denoising samples
 
 ## DNS1 synthetic test samples, no reverb
