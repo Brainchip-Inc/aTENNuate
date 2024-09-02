@@ -14,7 +14,11 @@ One simply needs a working Python environment, and run the following
 ```
 pip install -r requirements.txt
 ```
-To run the pre-trained network on custom audio samples, simply put the `.wav` files (or other format supported by `librosa`) into the denoised_samples directory, and run `python denoise.py`.
+To run the pre-trained network on custom audio samples, simply put the `.wav` files (or other format supported by `librosa`) into the `noisy_samples` directory, and run
+```
+python denoise.py
+```
+The denoised samples will then be saved as `.wav` files in the `denoised_samples` directory.
 
 ## Denoising samples
 
