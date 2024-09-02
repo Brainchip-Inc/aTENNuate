@@ -1,8 +1,22 @@
-This repo contains the network definition and a set of pre-trained weights for the `aTENNuate` model. It is meant for users to evaluate the performance of the network on custom audio samples.
+# aTENNuate
 
-Note that the repo does not contain the recurrent configuration of the network, hence it by itself cannot be efficiently used for real-time inference. In addition, the pre-trained network is not quantized or sparsified.
+## Description
 
-# Denoising samples
+aTENNuate is a network that can be configured for real-time speech enhancement on raw audio waveforms. It can perform tasks such as audio denoising, super-resolution, and de-quantization. This repo contains the network definition and a set of pre-trained weights for the aTENNuate model.
+
+Note that the repo is meant for denoising performance evaluation on custom audio samples, and is not optimized for inference. It also does not contain the recurrent configuration of the network, so it cannot be directly used for real-time inference by itself. 
+
+Please contact Brainchip Inc. to learn more on the full real-time audio denoising solution.
+
+## Quickstart
+
+One simply needs a working Python environment, and run the following
+```
+pip install -r requirements.txt
+```
+To run the pre-trained network on custom audio samples, simply put the `.wav` files (or other format supported by `librosa`) into the denoised_samples directory, and run `python denoise.py`.
+
+## Denoising samples
 
 ### DNS1 synthetic test samples, no reverb
 
