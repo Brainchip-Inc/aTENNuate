@@ -1,7 +1,5 @@
 # aTENNuate
 
-![Logo](logo.webp)
-
 ## Description
 
 aTENNuate is a network that can be configured for real-time speech enhancement on raw audio waveforms. It can perform tasks such as audio denoising, super-resolution, and de-quantization. This repo contains the network definition and a set of pre-trained weights for the aTENNuate model.
