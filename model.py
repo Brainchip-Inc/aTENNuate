@@ -167,3 +167,19 @@ class SSMAutoencoder(nn.Module):
             x = ssm[1](x)
             
         return self.last_ssms(x)
+    
+    
+# def opt_ssm_forward_with_kernels(input, B_hat, C, K=None, kernel=None):
+#     batch, c_in, _ = input.shape
+#     c_out, coeffs = C.shape
+    
+#     if (1 / c_in + 1 / c_out) > (1 / batch + 1 / coeffs):
+#         if c_in * c_out <= coeffs:
+#             return fft_conv('bcl,dcl->bdl', input, kernel)
+#     else:
+#         if coeffs <= c_in:
+#             x = torch.einsum('bcl,nc->bnl', input, B_hat)
+#             x = fft_conv('bnl,nl->bnl', x, K)
+#             return torch.einsum('bnl,dn->bdl', x, C)
+        
+#     return fft_conv('bcl,nl,nc,dn->bdl', input, K, B_hat, C)

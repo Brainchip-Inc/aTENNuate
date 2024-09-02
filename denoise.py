@@ -5,7 +5,7 @@ import torch
 import torchaudio
 from torch.nn import functional as F
 
-from simple_ssm_autoencoder import SSMAutoencoder
+from model import SSMAutoencoder
 
 torch.set_grad_enabled(False)
 
