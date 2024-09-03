@@ -5,7 +5,7 @@ import torch
 import torchaudio
 from torch.nn import functional as F
 
-from model import SSMAutoencoder
+from model import aTENNuate
 
 torch.set_grad_enabled(False)
 
@@ -29,7 +29,7 @@ audio_lens = [noisy.shape[-1] for noisy in noisy_samples]
 max_len = max(audio_lens)
 noisy_samples = torch.stack([F.pad(noisy, (0, max_len - noisy.shape[-1])) for noisy in noisy_samples])
 
-model = SSMAutoencoder()
+model = aTENNuate()
 model.load_state_dict(torch.load('weights.pt', map_location='cpu'))
 model = model.eval()
 denoised_samples = denoise(model, noisy_samples)

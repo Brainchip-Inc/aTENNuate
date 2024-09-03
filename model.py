@@ -95,7 +95,7 @@ class LayerNormFeature(nn.Module):
         return self.layer_norm(input.moveaxis(-1, -2)).moveaxis(-1, -2)
 
 
-class SSMAutoencoder(nn.Module):
+class aTENNuate(nn.Module):
     def __init__(self, 
                  in_channels=1, 
                  channels=[16, 32, 64, 96, 128, 256], 
