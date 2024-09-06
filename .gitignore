@@ -3,3 +3,5 @@ __pycache__
 *.ipynb
 test*
 upload*
+build
+dist
