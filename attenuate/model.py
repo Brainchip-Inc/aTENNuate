@@ -1,12 +1,16 @@
 import math
+from pathlib import Path
 
+import librosa
 import numpy as np
 import torch
+import torchaudio
+from einops.layers.torch import EinMix
 from torch import nn
 from torch.nn import functional as F
 from torch.nn.parameter import Parameter
 
-from einops.layers.torch import EinMix
+from huggingface_hub import hf_hub_download
 
 
 @torch.compiler.disable
@@ -57,6 +61,7 @@ class SSMLayer(nn.Module):
                  in_channels: int, 
                  out_channels: int, 
                  repeat: int):
+        torch.set_grad_enabled(False)
         from torch.backends import opt_einsum
         assert opt_einsum.is_available()
         opt_einsum.strategy = 'optimal'
@@ -82,7 +87,7 @@ class SSMLayer(nn.Module):
     def forward(self, input):
         K, B_hat = ssm_basis_kernels(self.A, self.B, self.log_dt, input.shape[-1])
         return opt_ssm_forward(input, K, B_hat, self.C)
-
+                
 
 class LayerNormFeature(nn.Module):
     """Apply LayerNorm to the channel dimension
@@ -167,6 +172,45 @@ class aTENNuate(nn.Module):
             x = ssm[1](x)
             
         return self.last_ssms(x)
+    
+    def denoise_single(self, noisy):
+        assert noisy.ndim == 2, f"noisy input should be shaped (samples, length)"
+        noisy = noisy[:, None, :]  # unsqueeze channel dim
+
+        padding = 256 - noisy.shape[-1] % 256
+        noisy = F.pad(noisy, (0, padding))
+        denoised = self.forward(noisy)
+
+        return denoised.squeeze(1)[..., :-padding]
+
+    def denoise_multiple(self, noisy_samples):
+        audio_lens = [noisy.shape[-1] for noisy in noisy_samples]
+        max_len = max(audio_lens)
+        noisy_samples = torch.stack([F.pad(noisy, (0, max_len - noisy.shape[-1])) for noisy in noisy_samples])
+        denoised_samples = self.denoise_single(noisy_samples)
+
+        return [denoised[..., :audio_len] for (denoised, audio_len) in zip(denoised_samples, audio_lens)]
+    
+    def denoise(self, noisy_dir, denoised_dir=None):
+        noisy_dir = Path(noisy_dir)
+        denoised_dir = None if denoised_dir is None else Path(denoised_dir)
+        
+        noisy_files = [fn for fn in noisy_dir.glob('*.wav')]
+        noisy_samples = [torch.tensor(librosa.load(wav_file, sr=16000)[0]) for wav_file in noisy_files]
+        print("denoising...")
+        denoised_samples = self.denoise_multiple(noisy_samples)
+        
+        if denoised_dir is not None:
+            print("saving audio files...")
+            for (denoised, noisy_fn) in zip(denoised_samples, noisy_files):
+                torchaudio.save(denoised_dir / f"{noisy_fn.stem}.wav", denoised[None, :], 16000)
+                
+        return denoised_samples
+    
+    def from_pretrained(self, repo_id):
+        print(f"loading weights from {repo_id}...")
+        model_weights_path = hf_hub_download(repo_id=repo_id, filename="weights.pt")
+        self.load_state_dict(torch.load(model_weights_path, map_location='cpu'))
     
     
 # def opt_ssm_forward_with_kernels(input, B_hat, C, K=None, kernel=None):

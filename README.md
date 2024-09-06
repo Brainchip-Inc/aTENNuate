@@ -10,11 +10,18 @@ Please contact Brainchip Inc. to learn more on the full real-time audio denoisin
 
 One simply needs a working Python environment, and run the following
 ```
-pip install -r requirements.txt
+pip install attenuate
 ```
-To run the pre-trained network on custom audio samples, simply put the `.wav` files (or other format supported by `librosa`) into the `noisy_samples` directory, and run
-```
-python denoise.py
+
+To run the pre-trained network on custom audio samples, simply put the `.wav` files (or other format supported by `librosa`) into the `noisy_samples` directory (or any directory of your choice), and run the following
+```python
+from attenuate import aTENNuate
+
+model = aTENNuate()
+model.from_pretrained("PeaBrane/aTENNuate")
+model.denoise('noisy_samples', denoised_dir='denoised_samples')
+
+# denoised_samples = model.denoise('noisy_samples')  # return torch tensors instead
 ```
 The denoised samples will then be saved as `.wav` files in the `denoised_samples` directory.
 
