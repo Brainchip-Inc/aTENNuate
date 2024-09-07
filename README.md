@@ -15,11 +15,15 @@ pip install attenuate
 
 To run the pre-trained network on custom audio samples, simply put the `.wav` files (or other format supported by `librosa`) into the `noisy_samples` directory (or any directory of your choice), and run the following
 ```python
-from attenuate import aTENNuate
+import torch
+from attenuate import Denoiser
 
-model = aTENNuate()
-model.from_pretrained("PeaBrane/aTENNuate")
-model.denoise('noisy_samples', denoised_dir='denoised_samples')
+model = Denoiser()
+model.eval()
+
+with torch.no_grad():
+    model.from_pretrained("PeaBrane/aTENNuate")
+    model.denoise('noisy_samples', denoised_dir='test_samples')
 
 # denoised_samples = model.denoise('noisy_samples')  # return torch tensors instead
 ```

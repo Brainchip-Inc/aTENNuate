@@ -1,1 +1,1 @@
-from .model import aTENNuate
+from .model import Denoiser

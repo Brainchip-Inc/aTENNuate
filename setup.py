@@ -8,7 +8,7 @@ def parse_requirements(filename):
 
 setup(
     name='attenuate',  # Name of your package
-    version='0.1.0',  # Initial version of your package
+    version='0.1.1',  # Initial version of your package
     author='Rudy Pei',  # Your name
     author_email='yanrpei@gmail.com',  # Your email
     description='Real-time raw speech enhancement with deep state-space modeling',  # A short description of the package

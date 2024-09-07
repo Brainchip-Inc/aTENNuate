@@ -61,7 +61,6 @@ class SSMLayer(nn.Module):
                  in_channels: int, 
                  out_channels: int, 
                  repeat: int):
-        torch.set_grad_enabled(False)
         from torch.backends import opt_einsum
         assert opt_einsum.is_available()
         opt_einsum.strategy = 'optimal'
@@ -100,7 +99,7 @@ class LayerNormFeature(nn.Module):
         return self.layer_norm(input.moveaxis(-1, -2)).moveaxis(-1, -2)
 
 
-class aTENNuate(nn.Module):
+class Denoiser(nn.Module):
     def __init__(self, 
                  in_channels=1, 
                  channels=[16, 32, 64, 96, 128, 256], 
