@@ -33,6 +33,13 @@ The denoised samples will then be saved as `.wav` files in the `denoised_samples
 
 The network should be easily interfaced with your custom training pipeline. The network expects an input of shape `(batch, 1, length)` and an output of the same shape, which can be sampled at any frequency (though the pre-trained weights operate at 16000 Hz). Note that length should be a multiple of 256, due to the downsampling behavior of the network.
 
+The model supports `torch.compile` for training, but the FFT operations will be performed in eager mode still, due to [complex numbers not being supported](https://github.com/pytorch/pytorch/issues/98161). The model does not fully support `torch.amp` yet stably, due to the sensitivity of the SSM layers. It is recommended to train the model with `tensorfloat32` instead, which can be enabled by
+```python
+from torch.backends import cudnn
+torch.backends.cuda.matmul.allow_tf32 = True
+cudnn.allow_tf32 = True
+```
+
 ## Denoising samples
 
 ### DNS1 synthetic test samples, no reverb
