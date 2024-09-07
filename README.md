@@ -29,6 +29,10 @@ with torch.no_grad():
 ```
 The denoised samples will then be saved as `.wav` files in the `denoised_samples` directory.
 
+## Training
+
+The network should be easily interfaced with your custom training pipeline. The network expects an input of shape `(batch, 1, length)` and an output of the same shape, which can be sampled at any frequency (though the pre-trained weights operate at 16000 Hz). Note that length should be a multiple of 256, due to the downsampling behavior of the network.
+
 ## Denoising samples
 
 ### DNS1 synthetic test samples, no reverb
@@ -46,6 +50,10 @@ The denoised samples will then be saved as `.wav` files in the `denoised_samples
 | [Noisy Sample 1](noisy_samples/ms_realrec_headset_cafe_spk2_3.wav) | [Denoised Sample 1](denoised_samples/ms_realrec_headset_cafe_spk2_3.wav) |
 | [Noisy Sample 2](noisy_samples/audioset_realrec_babycry_2x43exdQ5bo.wav) | [Denoised Sample 2](denoised_samples/audioset_realrec_babycry_2x43exdQ5bo.wav) |
 | [Noisy Sample 3](noisy_samples/audioset_realrec_printer_IZHuH27jLUQ.wav) | [Denoised Sample 3](denoised_samples/audioset_realrec_printer_IZHuH27jLUQ.wav) |
+
+## Contribution
+
+Please submit a Github issue if you find any bugs. If you'd like to contribute a new feature, feel free to open a Github issue to discuss, or email yanrpei@gmail.com.
 
 <!-- ## DNS1 synthetic test samples, no reverb
 
